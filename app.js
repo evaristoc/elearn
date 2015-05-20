@@ -23,11 +23,13 @@ var mongo = require('mongodb');
 // Solution: http://stackoverflow.com/questions/28651028/cannot-find-module-build-release-bson-code-module-not-found-js-bson
 // **
 var mongoose = require('mongoose');
+//mongoose.connect('mongodb://localhost/elearn');
 var db = mongoose.connection;
 // **
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var classes = require('./routes/classes');
 
 var app = express();
 
@@ -90,10 +92,18 @@ app.use(expressValidator({
 
 // **
 
-
+//E: Global Vars
+app.use(function(req,res,next){
+  res.locals.messages = require('express-messages')(req,res);
+  if (req.url == '/') {
+    res.locals.isHome = true;
+  }
+  next();
+});
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/classes', classes);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

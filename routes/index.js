@@ -1,9 +1,18 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
-});
+Class = require('../models/class');
 
+/* GET home page. */
+router.get('/', function(req, res, next) {
+    Class.getClasses(function(err,classes){
+      if (err) {
+        console.log(err);
+        res.send(err);
+      } else {
+        res.render('index', {'classes':classes});
+      }
+    },3); /*<---- E: adding limit HERE! */
+  }
+);
 module.exports = router;
